@@ -122,6 +122,15 @@ std::ostream & operator<<( std::ostream &out, const Matrix<T> &m )
 }
 
 template <typename T>
+std::istream & operator>>( std::istream &in, Matrix<T> &m )
+{
+  for (size_t i = 0; i < m.rows(); i++)
+    for (size_t j = 0; j < m.cols(); j++)
+      in >> m[i][j];
+  return in;
+}
+
+template <typename T>
 Matrix<T> & operator+=( Matrix<T> &lhs, const Matrix<T> &rhs )
 {
   assert(lhs.rows() == rhs.rows() && lhs.cols() == rhs.cols());
