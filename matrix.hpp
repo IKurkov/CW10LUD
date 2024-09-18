@@ -107,7 +107,6 @@ void swap( typename Matrix<T>::Row &r, typename Matrix<T>::Row &q)
   r.swap(q);
 }
 
-
 template <typename T>
 std::ostream & operator<<( std::ostream &out, const Matrix<T> &m )
 {
