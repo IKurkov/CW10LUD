@@ -4,10 +4,12 @@
 #include "matrix.hpp"
 #include "vector.hpp"
 
+/* Find lower and upper triangle matrices L and U such that A = LU */
+/* @return Determinant of A*/
 template <typename T>
 T LUDecomp( const Matrix<T> &A, Matrix<T> &L, Matrix<T> &U )
 {
-  size_t n = A.cols();
+  size_t n = A.rows();
   T det = T(1);
 
   L = AlmUnitMatrix<T>(n, n);
@@ -16,7 +18,7 @@ T LUDecomp( const Matrix<T> &A, Matrix<T> &L, Matrix<T> &U )
   for (size_t i = 0; i < n; i++)
     for (size_t j = 0; j < n; j++)
     {
-      T sum = 0;
+      T sum = T(0);
 
       if (i <= j)
       {
@@ -36,9 +38,31 @@ T LUDecomp( const Matrix<T> &A, Matrix<T> &L, Matrix<T> &U )
   return det;
 }
 
+/* Solve LUx = b where L and U - lower and upper trangle matrixes respectively */
+/* @return Vector x - solution of the system */
 template <typename T>
 Vector<T> LUSolve( const Matrix<T> &L, const Matrix<T> &U, const Vector<T> &b )
-{}
+{
+  size_t n = L.rows();
+  Vector<T> x(n);
+
+  /* Solve Ly = b */
+  for (size_t i = 0; i < n; i++)
+  {
+    x[i] = b[i];
+
+    for (size_t j = 0; j + 1 < n; j++)
+      x[i] -= L[i][j] * x[j];
+  }
+  /* Solve Ux = y */
+  for (size_t i = n - 1; i + 1 > 0; i--)
+  {
+    for (size_t j = n - 1; j > i; j--)
+      x[i] -= U[i][j] * x[j];
+    x[i] /= U[i][i];
+  }
+  return x;
+}
 
 template <typename T>
 T LUPDecomp( Matrix<T> A, Matrix<T> &L, Matrix<T> &U, Matrix<T> &P )

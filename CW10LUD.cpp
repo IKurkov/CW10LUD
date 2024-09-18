@@ -8,6 +8,7 @@
 int main( void )
 {
   Matrix<double> a(3, 3), l, u;
+  Vector<double> x, b(3);
   double det;
 
   a[0][0] = 5;
@@ -21,7 +22,9 @@ int main( void )
   a[2][2] = 10;
 
   det = LUDecomp(a, l, u);
+  x = LUSolve(l, u, b);
   std::cout << "L = " << l << '\n' << "U = " << u << '\n'
-    << "A = " << a << '\n' << "L * U = " << l * u;
+    << "A = " << a << '\n' << "L * U = " << l * u << '\n'
+    << x;
   return 0;
 }
