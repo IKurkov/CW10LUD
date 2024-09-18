@@ -128,8 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CW10LUD.cpp" />
+    <ClCompile Include="fort.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="fort.hpp" />
     <ClInclude Include="LUD.hpp" />
     <ClInclude Include="matrix.hpp" />
     <ClInclude Include="vector.hpp" />
