@@ -2,7 +2,6 @@
 #ifndef LUD_HPP
 
 #include <stdexcept>
-#include <iostream>
 
 #include "matrix.hpp"
 #include "vector.hpp"
@@ -57,7 +56,6 @@ Vector<T> LUSolve( const Matrix<T> &L, const Matrix<T> &U, const Vector<T> &b )
     for (size_t j = 0; j < i; j++)
       x[i] -= L[i][j] * x[j];
   }
-  std::cout << L * x << '\n';
   /* Solve Ux = y */
   for (size_t i = n - 1; i + 1 > 0; i--)
   {
@@ -68,10 +66,12 @@ Vector<T> LUSolve( const Matrix<T> &L, const Matrix<T> &U, const Vector<T> &b )
   return x;
 }
 
+/* Find triangle matrices L, U and permutation matrix P such that PA = LU */
+/* @return Determinant of A*/
 template <typename T>
 T LUPDecomp( const Matrix<T> &A, Matrix<T> &L, Matrix<T> &U, Matrix<T> &P )
 {
-  size_t n = A.rows(), *perm = new size_t[n];
+  size_t n = A.rows(), *perm = new size_t[n], cnt = 0;
   T det = T(1);
 
   for (size_t i = 0; i < n; i++)
@@ -91,6 +91,8 @@ T LUPDecomp( const Matrix<T> &A, Matrix<T> &L, Matrix<T> &U, Matrix<T> &P )
     if (max == 0)
       throw std::invalid_argument("Matrix A isn't invertible!");
     std::swap(perm[i], perm[idx]);
+    if (i != idx)
+      cnt++;
 
     for (size_t j = 0; j < n; j++)
     {
@@ -114,9 +116,11 @@ T LUPDecomp( const Matrix<T> &A, Matrix<T> &L, Matrix<T> &U, Matrix<T> &P )
     det *= U[i][i];
   for (size_t i = 0; i < n; i++)
     P[i][perm[i]] = T(1);
-  return det;
+  return det * (cnt & 1 ? -1 : 1);
 }
 
+/* Solve LUx = Pb where L and U - lower and upper trangle matrixes respectively */
+/* @return Vector x - solution of the system */
 template <typename T>
 Vector<T> LUPSolve( const Matrix<T> &L, const Matrix<T> &U, const Matrix<T> &P, const Vector<T> &b )
 {
