@@ -7,5 +7,21 @@
 
 int main( void )
 {
+  Matrix<double> a(3, 3), l, u;
+  double det;
+
+  a[0][0] = 5;
+  a[0][1] = 2;
+  a[0][2] = 1;
+  a[1][0] = 4;
+  a[1][1] = 0;
+  a[1][2] = 5;
+  a[2][0] = 1;
+  a[2][1] = 2;
+  a[2][2] = 10;
+
+  det = LUDecomp(a, l, u);
+  std::cout << "L = " << l << '\n' << "U = " << u << '\n'
+    << "A = " << a << '\n' << "L * U = " << l * u;
   return 0;
 }
