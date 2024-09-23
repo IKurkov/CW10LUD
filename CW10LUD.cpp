@@ -18,14 +18,14 @@ int main( void )
   {
     std::cout << "LU- & LUP-decompositions menu:\n"
       << "0 - exit\n"
-      << "1 - LU-deomposition\n"
+      << "1 - LU-decomposition\n"
       << "2 - LUP-decomposition\n";
     key = _getch();
     if (key == '0')
       run = false;
-    if (key == '1' || key == '2')
+    else if (key == '1' || key == '2')
     {
-      size_t n, n_exp;
+      size_t n, n_exp, opers;
       double det;
       Matrix<double> A, L, U, P;
       Vector<double> x, b;
@@ -60,15 +60,19 @@ int main( void )
       std::cout << "Input number of experients: ";
       std::cin >> n_exp;
       b = Vector<double>(n);
-      exp_res << fort::header << '#' << 'b' << 'x' << "|b - Ax|_inf" << fort::endr;
+      exp_res << fort::header << '#' << 'b' << 'x' << "|b - Ax|_inf" << "Operations" << fort::endr;
       for (size_t e = 1; e <= n_exp; e++)
       {
+        opers = 0;
         for (size_t i = 0; i < n; i++)
           b[i] = dis(eng);
-        x = (key == '1' ? LUSolve(L, U, b) : LUPSolve(L, U, P, b));
-        exp_res << e << b << x << NormInf(b - A * x) << fort::endr;
+        x = (key == '1' ? LUSolve(L, U, b, opers) : LUPSolve(L, U, P, b, opers));
+        exp_res << e << b << x << NormInf(b - A * x) << opers << fort::endr;
       }
       std::cout << exp_res.to_string();
+      opers = 0;
+      GaussElimination(A, b, x, opers);
+      std::cout << "Using Gaussian elimination: " << opers << '\n';
     }
     else
       std::cout << "[Error]: Incorrect choice!\n";
